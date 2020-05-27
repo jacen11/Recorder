@@ -1,4 +1,4 @@
-package ru.dpastukhov.recorder
+package ru.dpastukhov.voicerecorder
 
 import org.junit.Test
 

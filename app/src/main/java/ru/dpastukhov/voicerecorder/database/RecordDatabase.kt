@@ -1,4 +1,4 @@
-package ru.dpastukhov.recorder.database
+package ru.dpastukhov.voicerecorder.database
 
 import android.content.Context
 import androidx.room.Database

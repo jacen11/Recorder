@@ -1,4 +1,4 @@
-package ru.dpastukhov.recorder.database
+package ru.dpastukhov.voicerecorder.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

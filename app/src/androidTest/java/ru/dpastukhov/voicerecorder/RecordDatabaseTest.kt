@@ -1,4 +1,4 @@
-package ru.dpastukhov.recorder
+package ru.dpastukhov.voicerecorder
 
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -8,9 +8,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.dpastukhov.recorder.database.RecordDatabase
-import ru.dpastukhov.recorder.database.RecordDatabaseDao
-import ru.dpastukhov.recorder.database.RecordingItem
+import ru.dpastukhov.voicerecorder.database.RecordDatabase
+import ru.dpastukhov.voicerecorder.database.RecordDatabaseDao
+import ru.dpastukhov.voicerecorder.database.RecordingItem
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)

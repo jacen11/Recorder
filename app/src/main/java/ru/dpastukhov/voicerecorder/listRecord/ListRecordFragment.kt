@@ -1,4 +1,4 @@
-package ru.dpastukhov.recorder.listRecord
+package ru.dpastukhov.voicerecorder.listRecord
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import ru.dpastukhov.recorder.R
+import ru.dpastukhov.voicerecorder.R
 
 /**
  * A simple [Fragment] subclass.

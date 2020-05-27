@@ -1,4 +1,4 @@
-package ru.dpastukhov.recorder.record
+package ru.dpastukhov.voicerecorder.record
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -13,11 +13,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import ru.dpastukhov.recorder.MainActivity
-import ru.dpastukhov.recorder.R
-import ru.dpastukhov.recorder.database.RecordDatabase
-import ru.dpastukhov.recorder.database.RecordDatabaseDao
-import ru.dpastukhov.recorder.database.RecordingItem
+import ru.dpastukhov.voicerecorder.MainActivity
+import ru.dpastukhov.voicerecorder.R
+import ru.dpastukhov.voicerecorder.database.RecordDatabase
+import ru.dpastukhov.voicerecorder.database.RecordDatabaseDao
+import ru.dpastukhov.voicerecorder.database.RecordingItem
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
