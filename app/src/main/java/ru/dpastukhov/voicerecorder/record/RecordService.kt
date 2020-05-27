@@ -9,10 +9,7 @@ import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import ru.dpastukhov.voicerecorder.MainActivity
 import ru.dpastukhov.voicerecorder.R
 import ru.dpastukhov.voicerecorder.database.RecordDatabase
@@ -22,27 +19,25 @@ import java.io.File
 import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
-import java.util.*
 
 class RecordService : Service() {
 
     private var mFileName: String? = null
     private var mFilePath: String? = null
-    private var mCountRecords: Int? = null
 
     private var mRecorder: MediaRecorder? = null
+
     private var mStartingTimeMillis: Long = 0
     private var mElapsedMillis: Long = 0
-    private var mIncrementTimerTasks: TimerTask? = null
 
     private var mDatabase: RecordDatabaseDao? = null
 
     private val mJob = Job()
     private val mUiScope = CoroutineScope(Dispatchers.Main + mJob)
 
-    private val CHANNEL_ID = "RecordService"
-
-    override fun onBind(intent: Intent?): IBinder? = null
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -50,13 +45,11 @@ class RecordService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        mCountRecords = intent?.extras!!["COUNT"] as Int?
-
-        return START_STICKY
+        startRecording()
+        return START_NOT_STICKY
     }
 
     private fun startRecording() {
-
         setFileNameAndPath()
 
         mRecorder = MediaRecorder()
@@ -88,12 +81,14 @@ class RecordService : Service() {
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notification_recording))
             .setOngoing(true)
-
         mBuilder.setContentIntent(
             PendingIntent.getActivities(
-                applicationContext,
-                0, arrayOf(Intent(applicationContext, MainActivity::class.java)),
-                0
+                applicationContext, 0, arrayOf(
+                    Intent(
+                        applicationContext,
+                        MainActivity::class.java
+                    )
+                ), 0
             )
         )
         return mBuilder.build()
@@ -122,31 +117,36 @@ class RecordService : Service() {
         mRecorder?.stop()
         mElapsedMillis = System.currentTimeMillis() - mStartingTimeMillis
         mRecorder?.release()
+        Toast.makeText(
+            this,
+            getString(R.string.toast_recording_finish),
+            Toast.LENGTH_SHORT
+        ).show()
 
-        Toast.makeText(this, getString(R.string.toast_recording_finish), Toast.LENGTH_SHORT).show()
+        recordingItem.name = mFileName.toString()
+        recordingItem.filePath = mFilePath.toString()
+        recordingItem.length = mElapsedMillis
+        recordingItem.time = System.currentTimeMillis()
 
-        recordingItem.apply {
-            name = mFileName.toString()
-            filePath = mFilePath.toString()
-            length = mElapsedMillis
-            time = System.currentTimeMillis()
-        }
 
         mRecorder = null
 
         try {
             mUiScope.launch {
-                mDatabase?.insert(recordingItem)
+                withContext(Dispatchers.IO) {
+                    mDatabase?.insert(recordingItem)
+                }
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.e("RecordService", "exception", e)
         }
     }
 
     override fun onDestroy() {
-        if (mRecorder != null){
+        if (mRecorder != null) {
             stopRecording()
         }
+
         super.onDestroy()
     }
 
